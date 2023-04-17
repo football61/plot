@@ -1,0 +1,29 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Create a sample CSV file with 50 rows
+data = pd.DataFrame({'states': np.random.choice(['California', 'Texas', 'New York', 'Florida'], size=50),
+                     'priority': np.random.randint(20, 251, size=50),
+                     'days': np.random.rand(50)})
+
+# Correlate column 2 and 3 for 40 rows
+data.loc[:39, 'days'] = data.loc[:39, 'priority'] * 0.01
+
+# Standardize column 2 to be between -1 and 1
+data['priority'] = (data['priority'] - data['priority'].mean()) / data['priority'].std()
+data['priority'] = np.clip(data['priority'], -1, 1)
+
+# Multiply column 2 values by -1
+data['priority'] *= -1
+
+# Standardize column 3 to be between -1 and 1
+data['days'] = (data['days'] - data['days'].mean()) / data['days'].std()
+data['days'] = np.clip(data['days'], -1, 1)
+
+# Create a scatter plot
+plt.scatter(data['priority'], data['days'])
+plt.xlabel('Priority (Standardized)')
+plt.ylabel('Days (Standardized)')
+plt.title('Scatter Plot of Priority vs Days')
+plt.show()
